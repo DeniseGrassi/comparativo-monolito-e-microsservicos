@@ -1,0 +1,59 @@
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: tcc_user
+      POSTGRES_PASSWORD: tcc12345
+      POSTGRES_DB: postgres
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tcc_user -d postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  product-service:
+    build:
+      context: ./microservices/product-service
+    environment:
+      DATABASE_URL: postgresql://tcc_user:tcc12345@postgres:5432/product_db
+    ports:
+      - "8001:8001"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  customer-service:
+    build:
+      context: ./microservices/customer-service
+    environment:
+      DATABASE_URL: postgresql://tcc_user:tcc12345@postgres:5432/customer_db
+    ports:
+      - "8002:8002"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  order-service:
+    build:
+      context: ./microservices/order-service
+    environment:
+      DATABASE_URL: postgresql://tcc_user:tcc12345@postgres:5432/order_db
+      CUSTOMER_SERVICE_URL: http://customer-service:8002
+      PRODUCT_SERVICE_URL: http://product-service:8001
+    ports:
+      - "8003:8003"
+    depends_on:
+      postgres:
+        condition: service_healthy
+      product-service:
+        condition: service_started
+      customer-service:
+        condition: service_started
+
+volumes:
+  postgres_data:

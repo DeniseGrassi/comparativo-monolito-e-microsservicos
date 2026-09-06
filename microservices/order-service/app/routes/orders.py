@@ -15,8 +15,17 @@ router = APIRouter(
 )
 
 
-CUSTOMER_SERVICE_URL = "http://127.0.0.1:8002"
-PRODUCT_SERVICE_URL = "http://127.0.0.1:8001"
+import os
+
+CUSTOMER_SERVICE_URL = os.getenv(
+    "CUSTOMER_SERVICE_URL",
+    "http://127.0.0.1:8002"
+)
+
+PRODUCT_SERVICE_URL = os.getenv(
+    "PRODUCT_SERVICE_URL",
+    "http://127.0.0.1:8001"
+)
 
 
 @router.post("/", response_model=Order, status_code=201)

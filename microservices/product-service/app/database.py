@@ -1,11 +1,12 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
 
-DATABASE_URL = (
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
     "postgresql://tcc_user:tcc12345@127.0.0.1:5433/product_db"
 )
-
 
 engine = create_engine(DATABASE_URL)
 
@@ -27,3 +28,4 @@ def get_db():
         yield db
     finally:
         db.close()
+        
