@@ -1,7 +1,12 @@
+import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import declarative_base, sessionmaker
 
-DATABASE_URL = "postgresql://tcc_user:tcc12345@127.0.0.1:5433/tcc_microservices"
+
+DATABASE_URL = os.getenv(
+    "DATABASE_URL",
+    "postgresql://tcc_user:tcc12345@127.0.0.1:5433/monolith_db"
+)
 
 engine = create_engine(DATABASE_URL)
 

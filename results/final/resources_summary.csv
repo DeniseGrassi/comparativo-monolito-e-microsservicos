@@ -1,0 +1,7 @@
+architecture,users,cpu_mean,cpu_std,cpu_peak,memory_mean_mib,memory_std_mib,memory_peak_mib
+microservices,10,6.73,0.89,18.02,234.2,1.4,235.45
+microservices,50,19.56,2.29,30.51,245.67,2.16,248.43
+microservices,100,41.63,2.02,63.7,254.29,1.25,257.33
+monolith,10,6.82,2.03,25.69,112.97,0.28,114.87
+monolith,50,23.72,6.22,66.14,118.93,0.54,121.06
+monolith,100,37.75,1.18,55.97,121.53,0.44,122.49
